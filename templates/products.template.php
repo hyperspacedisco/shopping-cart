@@ -5,8 +5,11 @@
 	<li>Price: <?= $row['price']; ?></li>
 	<li>Stock: <?= $row['stock']; ?></li>
 	<li>
-		<form>
-			<input type="submit" value="Add to Cart">
+		<form action="" method="post">
+			<input type="hidden" name="product-id" value="<?= $row['id']?> ">
+			<input type="submit" value="Add to Cart" name="add-to-cart">
+			
+
 		</form>
 	</li>
 </ul>
