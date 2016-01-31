@@ -17,6 +17,8 @@ if ( isset($_GET['clearcart'])) {
 
 
 	$_SESSION[ 'cart' ] = [];
+
+	header('Location: index.php');
 }
 
 // add id of product to cart array when someone clicks "add to cart"
