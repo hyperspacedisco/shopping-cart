@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-include "templates/header.template.php";
+
 
 $dbc = new mysqli( 'localhost', 'root', '', 'shopping-cart');
 
@@ -24,7 +24,7 @@ if ( isset($_GET['clearcart'])) {
 // add id of product to cart array when someone clicks "add to cart"
 if ( isset($_POST[ 'add-to-cart']) ){
 
-	$id = $dbc->real_escape_string($_POST['id']);
+	$id = $dbc->real_escape_string($_POST['product-id']);
 
 	$sql = "SELECT price FROM products WHERE id = $id";
 
@@ -32,13 +32,36 @@ if ( isset($_POST[ 'add-to-cart']) ){
 
 	$result = $result->fetch_assoc();
 
-	$_SESSION[ 'cart' ] [] = [
-		'id'=>$_POST['product-id'],
-		'name'=>$_POST['name'],
-		'description'=>$_POST['description']
-		];
+	for($i=0; $i<count($_SESSION['cart']); $i++){
+
+
+		$cartItemID = $_SESSION['cart'][$i];
+
+		$addItemID = $_POST['product-id'];
+
+		if($cartItemID == $addItemID) {
+
+			$_SESSION['cart'][$i]['quantity'] += $_POST['quantity'];
+			$productFound = true;
+		}
+
+
+	};
+
+	if($productFound == false ) {
+
+		$_SESSION[ 'cart' ] [] = [
+			'id'=>$_POST['product-id'],
+			'name'=>$_POST['name'],
+			'description'=>$_POST['description'],
+			'price'=>$result['price'],
+			'quantity'=>$_POST['quantity']
+
+			];
+		};
 }
 
+include "templates/header.template.php";
 
 ?>
 
@@ -51,10 +74,11 @@ if ( isset($_POST[ 'add-to-cart']) ){
 	
 
 		//pulls data from database - query
-		$sql = "SELECT * FROM products";
+		$sql = "SELECT id, name, description, price, stock FROM products";
+
 
 		//run the query
-		
+		$result = $dbc->query( $sql );
 
 		//loop over results (fetch_assoc = fetches from  db individually)
 		while( $row = $result->fetch_assoc() ){

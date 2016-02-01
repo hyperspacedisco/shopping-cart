@@ -7,6 +7,14 @@
 </head>
 <body>
 
+
+<nav>
+	<ul>
+		<li><a href="index.php">Home</a></li>
+		<li><a href="checkout.php">Checkout</a></li>
+	</ul>
+</nav>
+
 <?php 
 	
 	echo "<pre>";
